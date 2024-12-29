@@ -86,8 +86,30 @@ public class BlocServiceImpl implements IBlocService {
         return bloc;
     }
 
+    @Scheduled(cron="0 * * * * *")
+    public void listeChambresParBloc() {
+        List<Bloc> blocs=blocRepository.findAll();
+        List<Chambre> chambres=chambreRepository.findAll();
+        for(Bloc b:blocs){
+            log.info("");
+            log.info("Bloc => {} ayant une capacité {}", b.getNomBloc(),b.getCapaciteBloc());
+            log.info("La liste des chambres pour ce bloc:");
+            if(chambres.isEmpty()){
+                log.info("Pas de chambre disponible dans ce bloc");
+            }else {
+                for (Chambre c : chambres) {
+                    if(b.getChambres().contains(c)){
+                        log.info("NumChambre: {} type : {}", c.getNumeroChambre(), c.getTypeC());
+                    }
+                }
+            }
+        }
+    }
 
-    @Scheduled(cron = "*/59 * * * * *")
+
+}
+/*
+    @Scheduled(cron = "0 * * * * *")
     public void listeChambresParBloc() {
         //Récuperer la liste de bloc
         List<Bloc> allblocs = blocRepository.findAll();
@@ -100,6 +122,8 @@ public class BlocServiceImpl implements IBlocService {
             }else {
                 log.info("La Liste des chambres pour ce bloc: ");
                 /*
+                autre example:
+
                     List<Chambre> chambresListe = bloc.getChambres();
                     puis on remplace bloc.getChambres() par chambresListe
                     donc
@@ -109,15 +133,15 @@ public class BlocServiceImpl implements IBlocService {
                             + "type: " + chambre.getTypeC());
                             }
                 */
-                bloc.getChambres().forEach(chambre -> {
+             /*   bloc.getChambres().forEach(chambre -> {
                     log.info("Num Chambre: " + chambre.getNumeroChambre()
                             + "type: " + chambre.getTypeC());
                 });
             }
         }
         //Récupérer la liste De Chambre
-        List<Chambre> allchambre = chambreRepository.findAll();
+
+//List<Chambre> allchambre = chambreRepository.findAll();
 
 
-    }
-}
+    }*/
